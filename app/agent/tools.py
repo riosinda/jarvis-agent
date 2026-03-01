@@ -108,7 +108,7 @@ def create_calendar_event(
 
 @tool
 def list_calendar_events(
-    max_results: int = 50,
+    max_results: int = 30,
     time_min: str = "",
     time_max: str = "",
     timezone: str = "America/Mexico_City",
