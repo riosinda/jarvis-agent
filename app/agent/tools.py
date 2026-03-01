@@ -106,6 +106,62 @@ def create_calendar_event(
         return f"Error al crear el evento: {e}"
 
 
+@tool
+def list_calendar_events(
+    max_results: int = 10,
+    time_min: str = "",
+    timezone: str = "America/Mexico_City",
+) -> str:
+    """Busca y lista los próximos eventos en Google Calendar.
+
+    Args:
+        max_results: Número máximo de eventos a devolver (por defecto: 10).
+        time_min: Fecha y hora de inicio en formato ISO 8601 (ej. '2026-03-01T10:00:00'). Si está vacío, usa la hora actual en UTC.
+        timezone: Zona horaria de la búsqueda (por defecto: America/Mexico_City).
+
+    Returns:
+        Texto detallando los próximos eventos encontrados, o un mensaje de error.
+    """
+    try:
+        service = get_calendar_service()
+        
+        if not time_min:
+            import datetime as dt_module
+            time_min = dt_module.datetime.utcnow().isoformat() + "Z"
+        else:
+            if not time_min.endswith("Z") and "+" not in time_min and "-" not in time_min[11:]:
+                time_min += "Z"
+
+        events_result = (
+            service.events()
+            .list(
+                calendarId="primary",
+                timeMin=time_min,
+                maxResults=max_results,
+                singleEvents=True,
+                orderBy="startTime",
+                timeZone=timezone,
+            )
+            .execute()
+        )
+        events = events_result.get("items", [])
+
+        if not events:
+            return "No tienes eventos próximos en el calendario."
+
+        result_lines = ["Tus próximos eventos son:"]
+        for event in events:
+            start = event["start"].get("dateTime", event["start"].get("date"))
+            end = event["end"].get("dateTime", event["end"].get("date"))
+            summary = event.get("summary", "Sin título")
+            location = event.get("location", "Sin ubicación")
+            result_lines.append(f"- '{summary}' | Inicio: {start} | Fin: {end} | Ubicación: {location}")
+
+        return "\n".join(result_lines)
+    except Exception as e:
+        return f"Error al obtener los eventos: {e}"
+
+
 # ── Date & Time Tool ─────────────────────────────────────────────────────────
 
 
@@ -144,4 +200,4 @@ def get_current_datetime(timezone: str = "America/Mexico_City") -> str:
 
 # ── Export ────────────────────────────────────────────────────────────────────
 
-agent_tools = [send_email, create_calendar_event, get_current_datetime]
+agent_tools = [send_email, create_calendar_event, list_calendar_events, get_current_datetime]
