@@ -108,15 +108,17 @@ def create_calendar_event(
 
 @tool
 def list_calendar_events(
-    max_results: int = 10,
+    max_results: int = 50,
     time_min: str = "",
+    time_max: str = "",
     timezone: str = "America/Mexico_City",
 ) -> str:
     """Busca y lista los próximos eventos en Google Calendar.
 
     Args:
-        max_results: Número máximo de eventos a devolver (por defecto: 10).
-        time_min: Fecha y hora de inicio en formato ISO 8601 (ej. '2026-03-01T10:00:00'). Si está vacío, usa la hora actual en UTC.
+        max_results: Número máximo de eventos a devolver (por defecto: 50).
+        time_min: Fecha y hora de inicio en formato ISO 8601 (ej. '2026-03-01T10:00:00'). Si está vacío, usa la hora actual.
+        time_max: Fecha y hora de fin en formato ISO 8601 (ej. '2026-03-08T23:59:59'). Opcional.
         timezone: Zona horaria de la búsqueda (por defecto: America/Mexico_City).
 
     Returns:
@@ -124,30 +126,34 @@ def list_calendar_events(
     """
     try:
         service = get_calendar_service()
+        import datetime as dt_module
         
         if not time_min:
-            import datetime as dt_module
             time_min = dt_module.datetime.utcnow().isoformat() + "Z"
         else:
             if not time_min.endswith("Z") and "+" not in time_min and "-" not in time_min[11:]:
                 time_min += "Z"
 
-        events_result = (
-            service.events()
-            .list(
-                calendarId="primary",
-                timeMin=time_min,
-                maxResults=max_results,
-                singleEvents=True,
-                orderBy="startTime",
-                timeZone=timezone,
-            )
-            .execute()
-        )
+        if time_max and not time_max.endswith("Z") and "+" not in time_max and "-" not in time_max[11:]:
+            time_max += "Z"
+
+        list_kwargs = {
+            "calendarId": "primary",
+            "timeMin": time_min,
+            "maxResults": max_results,
+            "singleEvents": True,
+            "orderBy": "startTime",
+            "timeZone": timezone,
+        }
+        
+        if time_max:
+            list_kwargs["timeMax"] = time_max
+
+        events_result = service.events().list(**list_kwargs).execute()
         events = events_result.get("items", [])
 
         if not events:
-            return "No tienes eventos próximos en el calendario."
+            return "No tienes eventos próximos en el calendario para este período."
 
         result_lines = ["Tus próximos eventos son:"]
         for event in events:

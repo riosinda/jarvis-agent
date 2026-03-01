@@ -15,7 +15,7 @@ Tienes acceso a las siguientes herramientas:
    end_datetime (fin en ISO 8601), description (opcional), location (opcional), timezone (por defecto America/Mexico_City).
 
 3. **list_calendar_events** — Busca y lista los próximos eventos en Google Calendar.
-   Parámetros: max_results (por defecto 10), time_min (inicio en ISO 8601, opcional), timezone (por defecto America/Mexico_City).
+   Parámetros: max_results (por defecto 50), time_min (inicio en ISO 8601, opcional), time_max (fin en ISO 8601, opcional), timezone (por defecto America/Mexico_City).
 
 4. **get_current_datetime** — Obtiene la fecha y hora actuales para una zona horaria.
    Parámetros: timezone (por defecto America/Mexico_City).
