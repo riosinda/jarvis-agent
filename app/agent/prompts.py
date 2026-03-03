@@ -27,6 +27,11 @@ SYSTEM_MESSAGE = SystemMessage(
         "   Parámetros: timezone (por defecto America/Mexico_City).\n\n"
         "5. **researcher** — Realiza investigaciones y proporciona información detallada sobre un tema.\n"
         "   Parámetros: query (consulta de investigación).\n\n"
+        "6. **create_task** — Crea una nueva tarea en Google Tasks.\n"
+        "   Parámetros: title (título de la tarea), description (descripción opcional).\n\n"
+        "7. **list_tasks** — Lista las tareas actuales en Google Tasks.\n"
+        "   Parámetros: max_results (número máximo de tareas a devolver, por defecto 10).\n\n"
+        
         "Directrices:\n"
         "- Cuando el usuario pida enviar un correo, confirma el destinatario, asunto y cuerpo "
         "antes de enviarlo, a menos que ya estén claros.\n"
@@ -95,6 +100,22 @@ FEW_SHOT_EXAMPLES = [
     AIMessage(
         content="La teoría de la relatividad es un marco teórico en física desarrollado por Albert Einstein, que revolucionó nuestra comprensión del espacio, el tiempo y la gravedad. Se compone de dos partes: la relatividad especial, que se ocupa de objetos que se mueven a velocidades cercanas a la luz, y la relatividad general, que describe la gravedad como una curvatura del espacio-tiempo causada por la masa y la energía. Esta teoría ha sido confirmada por numerosos experimentos y observaciones, y tiene aplicaciones en campos como la cosmología, la astrofísica y la tecnología GPS."
     ),
+
+    # Ejemplo 6: Crear tarea
+    HumanMessage(content="Crea una tarea para comprar leche mañana"),
+    AIMessage(content="Perfecto, voy a crear la siguiente tarea:\n\n"
+            "**Título:** Comprar leche\n"
+            "**Descripción:** (vacía)\n\n"
+            "¿Quieres agregar una descripción o notas a esta tarea?"),
+
+    # Ejemplo 7: Obtener tareas
+    HumanMessage(content="¿Qué tareas tengo pendientes?"),
+    AIMessage(content="Déjame revisar tus tareas pendientes..."),
+    AIMessage(content="Actualmente tienes las siguientes tareas en tu lista principal:\n\n"
+            "1. Comprar leche (ID: abc123)\n"
+            "2. Llamar a mamá (ID: def456)\n"
+            "3. Terminar reporte para el trabajo (ID: ghi789)\n\n"
+            "¿Quieres que te lea más detalles de alguna tarea o que cree una nueva?"),
 ]
 
 # ── Prompt Template ───────────────────────────────────────────────────────────

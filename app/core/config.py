@@ -30,6 +30,7 @@ class Settings(BaseSettings):
     GMAIL_SCOPES: list[str] = [
         "https://www.googleapis.com/auth/gmail.send",
         "https://www.googleapis.com/auth/calendar",
+        "https://www.googleapis.com/auth/tasks"
     ]
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}

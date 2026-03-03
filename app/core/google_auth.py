@@ -43,3 +43,7 @@ def get_gmail_service() -> Resource:
 def get_calendar_service() -> Resource:
     """Return an authorized Google Calendar API service instance."""
     return build("calendar", "v3", credentials=_get_credentials())
+
+def get_tasks_service() -> Resource:
+    """Return an authorized Google Tasks API service instance."""
+    return build("tasks", "v1", credentials=_get_credentials())
