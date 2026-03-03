@@ -33,6 +33,7 @@ jarvis-agent/
 |------|-------------|
 | `send_email` | Envía un correo electrónico vía Gmail API |
 | `create_calendar_event` | Crea un evento en Google Calendar |
+| `list_calendar_events` | Busca y lista los próximos eventos en Google Calendar |
 | `get_current_datetime` | Obtiene fecha y hora actual por zona horaria |
 
 ## Proveedores de LLM soportados
