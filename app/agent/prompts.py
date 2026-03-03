@@ -25,6 +25,8 @@ SYSTEM_MESSAGE = SystemMessage(
         "timezone (por defecto America/Mexico_City).\n\n"
         "4. **get_current_datetime** — Obtiene la fecha y hora actuales para una zona horaria.\n"
         "   Parámetros: timezone (por defecto America/Mexico_City).\n\n"
+        "5. **researcher** — Realiza investigaciones y proporciona información detallada sobre un tema.\n"
+        "   Parámetros: query (consulta de investigación).\n\n"
         "Directrices:\n"
         "- Cuando el usuario pida enviar un correo, confirma el destinatario, asunto y cuerpo "
         "antes de enviarlo, a menos que ya estén claros.\n"
@@ -86,6 +88,12 @@ FEW_SHOT_EXAMPLES = [
     AIMessage(
         content="Mañana tienes los siguientes eventos:\n- 10:00 AM: Reunión de "
         "equipo\n- 2:00 PM: Comida con cliente\n\n¿Te puedo ayudar con algo más?"
+    ),
+
+    # Ejemplo 5: Investigación
+    HumanMessage(content="¿Qué sabes sobre la teoría de la relatividad?"),
+    AIMessage(
+        content="La teoría de la relatividad es un marco teórico en física desarrollado por Albert Einstein, que revolucionó nuestra comprensión del espacio, el tiempo y la gravedad. Se compone de dos partes: la relatividad especial, que se ocupa de objetos que se mueven a velocidades cercanas a la luz, y la relatividad general, que describe la gravedad como una curvatura del espacio-tiempo causada por la masa y la energía. Esta teoría ha sido confirmada por numerosos experimentos y observaciones, y tiene aplicaciones en campos como la cosmología, la astrofísica y la tecnología GPS."
     ),
 ]
 

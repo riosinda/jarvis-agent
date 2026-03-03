@@ -9,6 +9,7 @@ from langchain_core.tools import tool
 
 from app.core.config import settings
 from app.core.google_auth import get_gmail_service, get_calendar_service
+from app.services.researcher import researcher
 
 
 # ── Gmail Tool ───────────────────────────────────────────────────────────────
@@ -207,4 +208,4 @@ def get_current_datetime(timezone: str = "America/Mexico_City") -> str:
 
 # ── Export ────────────────────────────────────────────────────────────────────
 
-agent_tools = [send_email, create_calendar_event, list_calendar_events, get_current_datetime]
+agent_tools = [send_email, create_calendar_event, list_calendar_events, get_current_datetime, researcher]
