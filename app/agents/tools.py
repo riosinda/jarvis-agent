@@ -3,9 +3,6 @@
 import requests
 from langchain_core.tools import tool
 
-from app.services.researcher import researcher
-
-
 # ── Date & Time Tool ─────────────────────────────────────────────────────────
 
 
@@ -45,4 +42,4 @@ def get_current_datetime(timezone: str = "America/Mexico_City") -> str:
 
 # ── Export ────────────────────────────────────────────────────────────────────
 
-general_tools = [get_current_datetime, researcher]
+general_tools = [get_current_datetime]

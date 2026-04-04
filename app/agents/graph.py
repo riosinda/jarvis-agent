@@ -12,6 +12,7 @@ from app.agents.memory import checkpointer
 from app.agents.select_llm import get_llm
 from app.agents.tools import general_tools
 from app.agents.agent_google.graph import google_subgraph
+from app.agents.agent_researcher.graph import researcher_subgraph
 
 # ── General Node ──────────────────────────────────────────────────────────────
 
@@ -58,13 +59,15 @@ _JARVIS_ROUTING_SYSTEM = SystemMessage(
         "- google_node: Todo lo relacionado con servicios de Google — Gmail (correos), "
         "Calendar (agenda, eventos), Tasks (tareas pendientes), Drive (archivos) "
         "y Docs (documentos).\n"
-        "- general_node: Todo lo demás — preguntas generales, conversación, "
-        "consultar la hora/fecha actual, búsquedas en la web.\n\n"
-        "Responde ÚNICAMENTE con 'google_node' o 'general_node'."
+        "- researcher_node: Investigación y búsqueda de información — búsqueda web, "
+        "artículos académicos (ArXiv, PubMed), y generación de reportes (PDF, Word).\n"
+        "- general_node: Consultar la hora/fecha actual y conversación general sin "
+        "necesidad de búsqueda ni herramientas Google.\n\n"
+        "Responde ÚNICAMENTE con 'google_node', 'researcher_node' o 'general_node'."
     )
 )
 
-_JarvisNext = Literal["google_node", "general_node"]
+_JarvisNext = Literal["google_node", "researcher_node", "general_node"]
 
 
 class _JarvisRoute(BaseModel):
@@ -74,7 +77,7 @@ class _JarvisRoute(BaseModel):
 _llm = get_llm()
 
 
-def jarvis_supervisor(state: MessagesState) -> Command[Literal["google_node", "general_node"]]:
+def jarvis_supervisor(state: MessagesState) -> Command[Literal["google_node", "researcher_node", "general_node"]]:
     """Supervisor Jarvis: enruta al nodo correcto según la intención del usuario."""
     messages = [_JARVIS_ROUTING_SYSTEM] + state["messages"]
     response = _llm.with_structured_output(_JarvisRoute).invoke(messages)
@@ -87,10 +90,12 @@ _builder = StateGraph(MessagesState)
 
 _builder.add_node("jarvis_supervisor", jarvis_supervisor)
 _builder.add_node("google_node", google_subgraph)
+_builder.add_node("researcher_node", researcher_subgraph)
 _builder.add_node("general_node", general_node)
 
 _builder.add_edge(START, "jarvis_supervisor")
 _builder.add_edge("google_node", END)
+_builder.add_edge("researcher_node", END)
 _builder.add_edge("general_node", END)
 
 agent = _builder.compile(checkpointer=checkpointer)
