@@ -1,5 +1,5 @@
 from langchain_core.messages import HumanMessage, BaseMessage
-from app.agent.graph import agent
+from app.agents.graph import agent
 
 def parse_agent_response(message: BaseMessage) -> str:
 

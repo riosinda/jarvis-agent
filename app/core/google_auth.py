@@ -47,3 +47,13 @@ def get_calendar_service() -> Resource:
 def get_tasks_service() -> Resource:
     """Return an authorized Google Tasks API service instance."""
     return build("tasks", "v1", credentials=_get_credentials())
+
+
+def get_drive_service() -> Resource:
+    """Return an authorized Google Drive API service instance."""
+    return build("drive", "v3", credentials=_get_credentials())
+
+
+def get_docs_service() -> Resource:
+    """Return an authorized Google Docs API service instance."""
+    return build("docs", "v1", credentials=_get_credentials())
